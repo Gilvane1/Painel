@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Chamada de Senhas - Clínica ULTRAVIDA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <img src="logo_ultravida.jpg" alt="Clínica Ultravida Logo" class="new-logo-img">
+                    </div>
+                    <h1 class="clinic-name">CLÍNICA ULTRAVIDA</h1>
+                    <p class="clinic-subtitle">Sistema de Chamada de Senhas</p>
+                </div>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <span id="eyeIcon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="btn-login" onclick="login()">
+                    <span class="btn-text">ENTRAR</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>Desenvolvedor: TI Gilvane C Benavenuto</p>
+                <p>86 99911 7717</p>
+            </div>
+        </div>
+        
+        <!-- Partículas de fundo -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Sistema Principal -->
+    <div class="main-system" id="mainSystem" style="display: none;">
+        <!-- Header Futurista -->
+        <header class="futuristic-header">
+            <div class="header-content">
+                <div class="clinic-info">
+                    <div class="clinic-logo">
+                        <div class="logo-pulse">
+                            <img src="logo_ultravida.jpg" alt="Clínica Ultravida Logo" class="new-logo-img">
+                        </div>
+                        <div class="clinic-details">
+                            <h1 class="clinic-title">CLÍNICA ULTRAVIDA</h1>
+                            <p class="clinic-location">Piracuruca • (86) 99985-2080 • Rua Senador Gervásio, Centro</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header-status">
+                    <div class="time-display">
+                        <div class="time-label">HORÁRIO ATUAL</div>
+                        <div class="time-value" id="clock">00:00:00</div>
+                    </div>
+                    <div class="developer-badge">
+                        <div class="dev-label">DESENVOLVEDOR</div>
+                        <div class="dev-name">TI Gilvane C Benavenuto</div>
+                        <div class="dev-contact">86 99911 7717</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha de energia -->
+            <div class="energy-line"></div>
+        </header>
+
+        <!-- Letreiro Digital -->
+        <div class="digital-marquee-container">
+            <div class="digital-marquee" id="digitalMarquee"></div>
+        </div>
+
+        <!-- Área Principal -->
+        <main class="main-content">
+            <!-- Painel de Senha Atual -->
+            <section class="current-call-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">CHAMADA ATUAL</h2>
+                    <div class="status-indicator active"></div>
+                </div>
+                
+                <div class="call-display">
+                    <div class="patient-name-display" id="currentPatient">---</div>
+                    <div class="call-details">
+                        <div class="detail-item">
+                            <span class="detail-label">PROFISSIONAL:</span>
+                            <span class="detail-value" id="currentProfessional">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">LOCAL:</span>
+                            <span class="detail-value" id="currentOffice">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">TIPO:</span>
+                            <span class="detail-value" id="currentServiceType">---</span>
+                        </div>
+                        <div class="detail-item" id="currentExamDetail" style="display: none;">
+                            <span class="detail-label">EXAME:</span>
+                            <span class="detail-value" id="currentExam">---</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Efeitos visuais -->
+                <div class="hud-elements">
+                    <div class="hud-corner top-left"></div>
+                    <div class="hud-corner top-right"></div>
+                    <div class="hud-corner bottom-left"></div>
+                    <div class="hud-corner bottom-right"></div>
+                </div>
+            </section>
+
+            <!-- Botões de Chamada Rápida -->
+            <section class="quick-call-buttons">
+                <button class="quick-call-btn" onclick="passwordSystem.callNextAvailablePatient()">CHAMAR PRÓXIMO</button>
+                <button class="quick-call-btn" onclick="passwordSystem.callPreviousPatient()">CHAMAR ANTERIOR</button>
+                <button class="quick-call-btn" onclick="passwordSystem.callUrgentPatient()">CHAMAR URGENTE</button>
+            </section>
+
+            <!-- Painel de Chamadas Avançadas -->
+            <section class="advanced-call-panel">
+                <div class="section-header">
+                    <h3 class="section-title">CHAMADAS AVANÇADAS</h3>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="advanced-call-container">
+                    <!-- Seleção de Consultório -->
+                    <div class="call-filter-group">
+                        <label for="officeSelector" class="filter-label">Consultório:</label>
+                        <select id="officeSelector" class="office-selector">
+                            <option value="">Todos os Consultórios</option>
+                            <!-- Opções serão carregadas dinamicamente -->
+                        </select>
+                    </div>
+                    
+                    <!-- Filtros de Prioridade -->
+                    <div class="call-filter-group">
+                        <label class="filter-label">Filtros de Prioridade:</label>
+                        <div class="priority-filters">
+                            <button class="filter-btn emergency-btn" onclick="passwordSystem.callEmergencyPatient()">
+                                <span class="filter-icon">🚨</span>
+                                <span class="filter-text">EMERGÊNCIA</span>
+                            </button>
+                            <button class="filter-btn urgent-btn" onclick="passwordSystem.callUrgentFromSelected()">
+                                <span class="filter-icon">⚡</span>
+                                <span class="filter-text">URGENTE</span>
+                            </button>
+                            <button class="filter-btn priority-btn" onclick="passwordSystem.callPriorityFromSelected()">
+                                <span class="filter-icon">⭐</span>
+                                <span class="filter-text">PRIORITÁRIO</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros de Tipo de Atendimento -->
+                    <div class="call-filter-group">
+                        <label class="filter-label">Filtros por Tipo:</label>
+                        <div class="type-filters">
+                            <button class="filter-btn exam-btn" onclick="passwordSystem.callNextExam()">
+                                <span class="filter-icon">🔬</span>
+                                <span class="filter-text">EXAMES</span>
+                            </button>
+                            <button class="filter-btn consultation-btn" onclick="passwordSystem.callNextConsultation()">
+                                <span class="filter-icon">👩‍⚕️</span>
+                                <span class="filter-text">CONSULTAS</span>
+                            </button>
+                            <button class="filter-btn procedure-btn" onclick="passwordSystem.callNextProcedure()">
+                                <span class="filter-icon">🏥</span>
+                                <span class="filter-text">PROCEDIMENTOS</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de Chamada por Consultório -->
+                    <div class="call-filter-group">
+                        <button class="call-office-btn" onclick="passwordSystem.callNextFromSelectedOffice()">
+                            <span class="btn-icon">📢</span>
+                            <span class="btn-text">CHAMAR DO CONSULTÓRIO SELECIONADO</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Histórico de Chamadas -->
+            <section class="call-history">
+                <div class="section-header">
+                    <h3 class="section-title">ÚLTIMAS CHAMADAS</h3>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="history-container" id="recentCalls">
+                    <div class="no-calls">Nenhuma chamada realizada ainda</div>
+                </div>
+            </section>
+
+            <!-- Grid de Consultórios -->
+            <section class="offices-grid">
+                <div class="section-header">
+                    <h3 class="section-title">CONSULTÓRIOS</h3>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="offices-container" id="officesContainer">
+                    <!-- Consultórios serão inseridos dinamicamente -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Barra de Controle Inferior -->
+        <footer class="control-bar">
+            <div class="control-content">
+                <button class="control-btn config-btn" onclick="passwordSystem.openConfigPanel()">
+                    <div class="btn-icon">⚙️</div>
+                    <span class="btn-label">CONFIGURAÇÕES</span>
+                    <div class="btn-pulse"></div>
+                </button>
+                
+                <button class="control-btn logout-btn" onclick="logout()">
+                    <div class="btn-icon">🚪</div>
+                    <span class="btn-label">SAIR</span>
+                    <div class="btn-pulse"></div>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div class="modal-overlay" id="configModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>CONFIGURAÇÕES DO SISTEMA</h2>
+                <button class="modal-close" onclick="passwordSystem.closeConfigPanel()">✕</button>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="patients" onclick="passwordSystem.switchTab('patients')">PACIENTES</button>
+                <button class="tab-btn" data-tab="offices" onclick="passwordSystem.switchTab('offices')">CONSULTÓRIOS</button>
+                <button class="tab-btn" data-tab="services" onclick="passwordSystem.switchTab('services')">TIPOS DE ATENDIMENTO</button>
+                <button class="tab-btn" data-tab="settings" onclick="passwordSystem.switchTab('settings')">CONFIGURAÇÕES</button>
+            </div>
+            
+            <div class="modal-content">
+                <!-- Aba Pacientes -->
+                <div class="tab-content active" id="patientsTab">
+                    <h3>Adicionar Paciente</h3>
+                    <form id="patientForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientName">Nome do Paciente:</label>
+                                <input type="text" id="patientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientOffice">Consultório:</label>
+                                <select id="patientOffice" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientPriority">Prioridade:</label>
+                                <select id="patientPriority">
+                                    <option value="normal">Normal</option>
+                                    <option value="priority">Prioritário</option>
+                                    <option value="urgent">Urgente</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceType">Tipo de Atendimento:</label>
+                                <select id="serviceType" onchange="passwordSystem.toggleExamField()">
+                                    <!-- Opções serão carregadas dinamicamente -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" id="examField" style="display: none;">
+                            <div class="form-group full-width">
+                                <label for="examType">Tipo de Exame:</label>
+                                <input type="text" id="examType" placeholder="Ex: Raio-X, Ultrassom, etc.">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Adicionar Paciente</button>
+                    </form>
+                    
+                    <div class="patients-queue" id="patientsQueue">
+                        <!-- Fila de pacientes será inserida aqui -->
+                    </div>
+                </div>
+                
+                <!-- Aba Consultórios -->
+                <div class="tab-content" id="officesTab">
+                    <h3>Gerenciar Consultórios</h3>
+                    <form id="officeForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="officeNumber">Número:</label>
+                                <input type="number" id="officeNumber" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="officeName">Nome:</label>
+                                <input type="text" id="officeName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="officeDoctor">Profissional:</label>
+                                <input type="text" id="officeDoctor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="officeColor">Cor:</label>
+                                <input type="color" id="officeColor" value="#C41E3A">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar Consultório</button>
+                    </form>
+                    
+                    <div class="offices-list" id="officesList">
+                        <!-- Lista de consultórios será inserida aqui -->
+                    </div>
+                </div>
+                
+                <!-- Aba Tipos de Atendimento -->
+                <div class="tab-content" id="servicesTab">
+                    <h3>Gerenciar Tipos de Atendimento</h3>
+                    <form id="serviceForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceName">Nome do Tipo:</label>
+                                <input type="text" id="serviceName" placeholder="Ex: Consulta, Exame, Procedimento..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceColor">Cor:</label>
+                                <input type="color" id="serviceColor" value="#C41E3A">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceRequiresDetails">Requer Detalhes Adicionais:</label>
+                                <select id="serviceRequiresDetails">
+                                    <option value="false">Não</option>
+                                    <option value="true">Sim</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceDetailsLabel">Rótulo dos Detalhes:</label>
+                                <input type="text" id="serviceDetailsLabel" placeholder="Ex: Tipo de Exame, Procedimento...">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar Tipo de Atendimento</button>
+                    </form>
+                    
+                    <div class="services-list" id="servicesList">
+                        <!-- Lista de tipos de atendimento será inserida aqui -->
+                    </div>
+                </div>
+                
+                <!-- Aba Configurações -->
+                <div class="tab-content" id="settingsTab">
+                    <div class="settings-section">
+                        <h3>Configurações da Clínica</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clinicName">Nome da Clínica:</label>
+                                <input type="text" id="clinicName" value="CLÍNICA ULTRAVIDA">
+                            </div>
+                            <div class="form-group">
+                                <label for="clinicCity">Cidade:</label>
+                                <input type="text" id="clinicCity" value="Piracuruca">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clinicPhone">Telefone:</label>
+                                <input type="text" id="clinicPhone" value="(86) 99985-2080">
+                            </div>
+                            <div class="form-group">
+                                <label for="clinicAddress">Endereço:</label>
+                                <input type="text" id="clinicAddress" value="Rua Senador Gervásio, Centro">
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="passwordSystem.saveClinicInfo()">Salvar Informações</button>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Configurações do Letreiro</h3>
+                        <div class="form-group full-width">
+                            <label for="marqueeTextInput">Texto do Letreiro:</label>
+                            <input type="text" id="marqueeTextInput" placeholder="Digite o texto do letreiro...">
+                        </div>
+                        <button type="button" class="btn-primary" onclick="passwordSystem.updateMarqueeFromInput()">Atualizar Letreiro</button>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Configurações de Som</h3>
+                        <div class="form-group">
+                            <label for="soundVolume">Volume do Som: <span id="volumeValue">50%</span></label>
+                            <input type="range" id="soundVolume" min="0" max="100" value="50">
+                        </div>
+                        <button type="button" class="btn-secondary" onclick="passwordSystem.testSound()">Testar Som</button>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Alterar Senha</h3>
+                        <div class="form-group">
+                            <label for="currentPassword">Senha Atual:</label>
+                            <input type="password" id="currentPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Nova Senha:</label>
+                            <input type="password" id="newPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Nova Senha:</label>
+                            <input type="password" id="confirmPassword">
+                        </div>
+                        <button type="button" class="btn-primary" onclick="passwordSystem.changePassword()">Alterar Senha</button>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Sistema</h3>
+                        <button type="button" class="btn-danger" onclick="passwordSystem.resetSystem()">Resetar Sistema</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal-overlay" id="confirmModal" style="display: none;">
+        <div class="confirm-container">
+            <div class="confirm-header">
+                <h3>Confirmação</h3>
+            </div>
+            <div class="confirm-content">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="confirm-actions">
+                <button class="btn-danger" id="btnConfirm">Confirmar</button>
+                <button class="btn-secondary" id="btnCancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container de Notificações -->
+    <div class="notifications-container" id="notificationsContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
